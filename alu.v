@@ -9,7 +9,6 @@ module alu (
     output reg        sign
 );
 
-    // Opcodes
     localparam OP_ADD = 4'b0000;
     localparam OP_SUB = 4'b0001;
     localparam OP_INC = 4'b0010;
@@ -23,10 +22,10 @@ module alu (
     localparam OP_ROL = 4'b1010;
     localparam OP_ROR = 4'b1011;
 
-    reg [8:0] temp;  // 9 bits for carry detection
+    reg [8:0] temp; 
 
     always @(*) begin
-        // default flags
+
         zero     = 1'b0;
         carry    = 1'b0;
         overflow = 1'b0;
@@ -39,14 +38,13 @@ module alu (
                 temp   = {1'b0, A} + {1'b0, B};
                 result = temp[7:0];
                 carry  = temp[8];
-                // overflow: sign bit carries into bit7 differently
                 overflow = (A[7] == B[7]) && (result[7] != A[7]);
             end
 
             OP_SUB: begin
                 temp   = {1'b0, A} - {1'b0, B};
                 result = temp[7:0];
-                carry  = ~temp[8];  // borrow flag inverted
+                carry  = ~temp[8];  
                 overflow = (A[7] != B[7]) && (result[7] != A[7]);
             end
 
@@ -102,7 +100,6 @@ module alu (
             end
         endcase
 
-        // Zero flag
         zero = (result == 8'd0);
         // Sign flag
         sign = result[7];
